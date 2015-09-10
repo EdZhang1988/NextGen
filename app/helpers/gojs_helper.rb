@@ -1,0 +1,2 @@
+module GojsHelper
+end

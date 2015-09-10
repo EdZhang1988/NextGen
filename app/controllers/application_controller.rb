@@ -6,4 +6,8 @@ class ApplicationController < ActionController::Base
   def home
 
   end
+
+  def canvas_view
+
+  end
 end

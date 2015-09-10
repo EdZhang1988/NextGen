@@ -1,12 +1,9 @@
 Rails.application.routes.draw do
   get 'home', to: 'application#home'
-
-
-
-
-
-
-
+  get 'canvas', to: 'application#canvas_view'
+  get 'statemachine', to: 'statemachine#index'
+#  get 'statemachine/show' to:'statemachine#show'
+  get 'gojs' , to: 'gojs#index'
 
 
 

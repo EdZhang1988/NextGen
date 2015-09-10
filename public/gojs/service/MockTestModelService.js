@@ -41,6 +41,12 @@ var MockTestModelService = function() {
 			name: "Delta",
 			text: "click 'login' button",
 			source: ""
+		}, {
+			key: "4",
+			loc: "150 70",
+			name: "end",
+			text: "End",
+			category: "End"	
 		}];
 
 		var linkDataArray = [{
@@ -61,7 +67,12 @@ var MockTestModelService = function() {
 		}, {
 			from: "2",
 			to: "3",
-			"fromPort": "R",
+			"fromPort": "B",
+			"toPort": "T"
+		}, {
+			from: "3",
+			to: "4",
+			"fromPort": "B",
 			"toPort": "T"
 		}];
 

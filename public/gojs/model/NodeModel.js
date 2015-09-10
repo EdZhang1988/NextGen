@@ -50,22 +50,23 @@ function nodeStyle() {
 	];
 }
 
-TOD.gojs.NodeModel.getNodeModel = function ( modelName ){
-	var target = TOD.gojs.NodeModels[modelName];
-	if(target && target().name){
-		return target().init();
+TOD.gojs.NodeModels.getNodeModel = function ( modelName ){
+	var target = TOD.gojs.NodeModels[modelName]();
+	
+	if(target.name){
+		return target.init();
 	}
 	return null;
 }
 
 TOD.gojs.NodeModels.ActionNode = function() {
 	function nodeSpecific(){
-		var nodeStyle = nodeStyle();
-		events = nodeStyle[1];
+		var _nodeStyle = nodeStyle();
+		events = _nodeStyle[1];
 		events.doubleClick = function (e, node){
 			console.log("events binding for actionNode");
 		}
-		return nodeStyle;
+		return _nodeStyle;
 	}
 
 	function init() {
@@ -94,8 +95,8 @@ TOD.gojs.NodeModels.ActionNode = function() {
 	}
 
 	return {
-		name: "actionNode";
-		init: init();
+		name: "actionNode",
+		'init': init
 	};
 };
 
@@ -125,12 +126,12 @@ TOD.gojs.NodeModels.StartNode = function(){
 	}
 
 	return {
-		name: "startNode";
-		init: init();
+		name: "startNode",
+		'init': init
 	};
 };
 
-TOD.gojs.NodeModels.endNode = function (){
+TOD.gojs.NodeModels.EndNode = function (){
 	function init(){
 		return 	GO(go.Node, "Spot", nodeStyle(),
 			GO(go.Panel, "Auto",
@@ -152,25 +153,25 @@ TOD.gojs.NodeModels.endNode = function (){
 		)
 	}
 
-
 	return {
-		name: "endNode";
-		init: init();
+		name: "endNode",
+		'init': init
 	};
 }
 
-TOD.gojs.NodeModels.assertNode = function (){
+TOD.gojs.NodeModels.AssertNode = function (){
 	function nodeSpecific(){
-		var nodeStyle = nodeStyle();
-		events = nodeStyle[1];
+		var _nodeStyle = nodeStyle();
+		events = _nodeStyle[1];
 		events.doubleClick = function (e, node){
 			console.log("events binding for assertNode");
+			console.log(node.data);
 		}
-		return nodeStyle;
+		return _nodeStyle;
 	}
 
 	function init(){
-		return GO(go.Node, "Spot", nodeStyle(),
+		return GO(go.Node, "Spot", nodeSpecific(),
 			GO(go.Panel, "Auto",
 				GO(go.Shape, "RoundedRectangle", {
 					minSize: new go.Size(32, 32),
@@ -192,19 +193,19 @@ TOD.gojs.NodeModels.assertNode = function (){
 	}
 
 	return {
-		name: "assertNode";
-		init: init();
+		name: "assertNode",
+		'init': init
 	};
 }
 
-TOD.gojs.NodeModels.predefinedNode = function (){
+TOD.gojs.NodeModels.PredefinedNode = function (){
 	function nodeSpecific(){
-		var nodeStyle = nodeStyle();
-		events = nodeStyle[1];
+		var _nodeStyle = nodeSpecific();
+		events = _nodeStyle[1];
 		events.doubleClick = function (e, node){
 			console.log("events binding for assertNode");
 		}
-		return nodeStyle;
+		return _nodeStyle;
 	}
 
 	function init(){
@@ -228,9 +229,49 @@ TOD.gojs.NodeModels.predefinedNode = function (){
 		)
 	}
 
-
 	return {
-		name: "predefinedNode";
-		init: init();
+		name: "predefinedNode",
+		'init': init
 	};
 }
+
+TOD.gojs.NodeModels.PreconditionNode = function (){
+	function nodeSpecific(){
+		var _nodeStyle = nodeSpecific();
+		events = _nodeStyle[1];
+		events.doubleClick = function (e, node){
+			console.log("events binding for assertNode");
+		}
+		return _nodeStyle;
+	}
+
+	function init(){
+		return GO(go.Node, "Spot", nodeStyle(),
+			GO(go.Panel, "Auto",
+				GO(go.Shape, "RoundedRectangle", {
+					minSize: new go.Size(40, 40),
+					fill: "#E95055",
+					stroke: null
+				}),
+				GO(go.TextBlock, "Defined step", {
+						margin: 6,
+						stroke: "white",
+						font: "bold 12px sans-serif"
+					},
+					new go.Binding("text").makeTwoWay())
+			),
+			makePort("L", go.Spot.Left, false, true),
+			makePort("R", go.Spot.Right, false, true),
+			makePort("T", go.Spot.Top, false, true)
+		)
+	}
+
+	return {
+		name: "preconditionNode",
+		'init': init
+	};
+}
+
+
+// Thinking about the possibility of template
+

@@ -152,6 +152,10 @@ var groupPalette = GO(go.Palette, "palette-group", {
 	])
 });
 
+var myOverview = GO( go.Overview, "myOverviewDiv", {
+	observed: TOD.gojs.myDiagram
+});
+
 // var myModel = GO(go.GraphLinksModel);
 // in our model data, each node is represented by a JavaScript object:
 

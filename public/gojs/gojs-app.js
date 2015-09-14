@@ -3,18 +3,14 @@ var GO = go.GraphObject.make;
 var TOD = TOD || {};
 TOD.gojs = TOD.gojs || {};
 
+TOD.gojs.testModelService = new MockTestModelService();
 
 // Initialization for canvas part
 
 TOD.gojs.myDiagram = GO(go.Diagram, "myDiagramDiv", {
 	initialContentAlignment: go.Spot.Top, // center Diagram contents
 	allowDrop: true,
-
-	layout: GO(go.TreeLayout, {
-		angle: 90,
-		layerSpacing: 35
-	}),
-	autoScale: go.Diagram.Uniform,
+	initialAutoScale: go.Diagram.Uniform,
 	"undoManager.isEnabled": true // enable Ctrl-Z to undo and Ctrl-Y to redo
 });
 
@@ -41,6 +37,7 @@ TOD.gojs.myDiagram.nodeTemplateMap.add("Predef_Step",
 TOD.gojs.myDiagram.nodeTemplateMap.add("Precondition",
 	TOD.gojs.NodeModels.getNodeModel("PreconditionNode")
 );
+
 
 
 function showDetail(e, node, t) {
@@ -121,6 +118,9 @@ TOD.gojs.myDiagram.linkTemplate =
 		)
 	);
 
+TOD.gojs.myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
+TOD.gojs.myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
+
 var myPalette = GO(go.Palette, "myPalette", {
 	nodeTemplateMap: TOD.gojs.myDiagram.nodeTemplateMap,
 	model: new go.GraphLinksModel([{
@@ -143,23 +143,22 @@ var myPalette = GO(go.Palette, "myPalette", {
 var groupPalette = GO(go.Palette, "palette-group", {
 	nodeTemplateMap: TOD.gojs.myDiagram.nodeTemplateMap,
 	model: new go.GraphLinksModel([{
-			category: "Precondition",
-			text: "Precondition"
-		}, {
-			category: "Predef_Step",
-			text: "Predefined Step"
-		}
-	])
+		category: "Precondition",
+		text: "Precondition"
+	}, {
+		category: "Predef_Step",
+		text: "Predefined Step"
+	}])
 });
 
-var myOverview = GO( go.Overview, "myOverviewDiv", {
+var myOverview = GO(go.Overview, "myOverviewDiv", {
 	observed: TOD.gojs.myDiagram
 });
 
 // var myModel = GO(go.GraphLinksModel);
 // in our model data, each node is represented by a JavaScript object:
 
-var dataSet = new MockTestModelService().load();
+var dataSet = TOD.gojs.testModelService.load('complex');
 
 // myDiagram.model = myModel;
 TOD.gojs.myDiagram.model = go.Model.fromJson(dataSet);
@@ -169,3 +168,114 @@ $("#detail-dialog").dialog({
 	modal: true
 });
 
+$("#load-dialog").dialog({
+	autoOpen: false,
+	modal: true
+});
+
+$('#btn_diagram_export_json')[0].onclick = function exportDiagramDataToJson() {
+	var nodes = [],
+		links = [];
+	var result = {};
+
+	TOD.gojs.myDiagram.nodes.each(function(e) {
+		nodes.push(e.data);
+	});
+
+	TOD.gojs.myDiagram.links.each(function(e) {
+		links.push(e.data);
+	});
+
+	result = {
+		'class': 'go.GraphLinksModel',
+		'linkFromPortIdProperty': 'fromPort',
+		'linkToPortIdProperty': 'toPort',
+		'nodeDataArray': nodes,
+		'linkDataArray': links
+	}
+
+	console.log(JSON.stringify(result));
+}
+
+$('#btn_load_diagrams')[0].onclick = function() {
+	function initTestModelLoader() {
+		var $loader = $("#test-model-selector");
+
+		// var data = MockTestModelService().loadHeaders();
+
+		TOD.gojs.modelLoader = $loader.jstree({
+			"core": {
+				"animation": 0,
+				"check_callback": true,
+				"themes": {
+					"stripes": true
+				},
+				'data': {
+					'url': function(node) {
+						return node.id === '#' ?
+							"gojs/data/ajax-project-header.json" : "gojs/data/ajax-testsuite-header.json";
+					},
+					'data': function(node) {
+						return {
+							'id': node.id
+						};
+					}
+				}
+			},
+			"types": {
+				"#": {
+					"max_children": 1,
+					"max_depth": 4,
+					"valid_children": ["root"]
+				},
+				"root": {
+					'icon': "glyphicon glyphicon-bookmark",
+					"valid_children": ["default"]
+				},
+				"default": {
+					"valid_children": ["default", "file"],
+					"icon": "glyphicon glyphicon-book"
+				},
+				"file": {
+					"icon": "glyphicon glyphicon-file",
+					"valid_children": []
+				}
+			},'plugins': [
+				"state", "types", "wholerow","dnd"	
+			]
+		});
+
+		TOD.gojs.modelLoader.on("select_node.jstree", function(e, node){
+			TOD.gojs.selectedModelNode = node.node;
+		})
+	}
+
+	if(!TOD.gojs.selectedModelNode){
+		initTestModelLoader();
+	}
+	
+	$('#load-dialog').dialog('open');	
+}
+
+function loadModalClose() {
+	$('#load-dialog').dialog('close');
+}
+
+function openTestSuite(){
+	function loadModelFromSelection(){
+		var key = TOD.gojs.selectedModelNode.original.key;
+		// console.log(TOD.gojs.testModelService.load(key));
+		try{
+			TOD.gojs.myDiagram.model = go.Model.fromJson(TOD.gojs.testModelService.load(key));	
+		} catch (e){
+			return false
+		}
+		
+		return true;
+	}
+
+	if(!loadModelFromSelection()){
+		return ;
+	}
+	loadModalClose();	
+}

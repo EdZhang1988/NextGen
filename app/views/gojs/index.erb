@@ -1,6 +1,14 @@
+<% content_for :head do %>
+	<link rel="stylesheet" href="plugins/jstree/style.css">
+<% end %>
+
+
 <% content_for :scripts do %>
+	<!--
 	<script type="text/javascript" src='http://fb.me/react-0.13.0.js' ></script>
 	<script type="text/javascript" src='http://fb.me/JSXTransformer-0.13.0.js' ></script>
+-->
+	<script type="text/javascript" src="plugins/jstree/jstree.min.js"></script>
 	<script type="text/javascript" src='gojs/go.js' ></script>
 	<script type="text/javascript" src='gojs/service/MockTestModelService.js'></script>
 	<script type="text/javascript" src='gojs/model/NodeModel.js'></script>
@@ -48,15 +56,16 @@
    		<div class="col-md-10">
    			<div class="row" style="z-index: 100; margin: 5px 10px;">
 	   			<div class="cover col-md-7" >
-	   			    <button class="btn btn-sm btn-default" >Save</button>
-	   			    <button class="btn btn-sm btn-primary" >Load</load>
-	   			    <button class="btn btn-sm btn-default" >Run</load>
-	   			    <button class="btn btn-sm btn-default" >Debug</load>
-	   			    <button class="btn btn-sm btn-default" >Debug</load>
+	   			    <button class="btn btn-sm btn-default" disabled>Save</button>
+	   			    <button id="btn_load_diagrams" class="btn btn-sm btn-primary" >Load</button>
+	   			    <button id="btn_new_diagram" class="btn btn-sm btn-success" >New</button>
+	   			    <button class="btn btn-sm btn-default" disabled>Run</button>
+	   			    <button class="btn btn-sm btn-default" disabled>Debug</button>
+	   			    <button id="btn_diagram_export_json" class="btn btn-sm btn-warning" >Export as Json</button>
 	   			</div>
 	   			<div class="col-md-5">
-	   				<button class="btn btn-sm btn-default" >Version Control</button>
-	   				<button class="btn btn-sm btn-default" >Change Log</button>
+	   				<button class="btn btn-sm btn-default pull-right" >Version Control</button>
+	   				<button class="btn btn-sm btn-default  pull-right" >Change Log</button>
 	   			</div>
 	   		</div>
    			<div id="myDiagramDiv" style="height: 720px; background:#DAE4E4"></div>		
@@ -82,4 +91,30 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
+
+    <div id="load-dialog" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+	            <div class="modal-header">
+                    <button type="button" onclick="loadModalClose()" class="close" data-dismiss="modal" aria-label="Close">
+                    	<span aria-hidden="true">×</span>
+                   	</button>
+                    <h4 class="modal-title">Load Test Model</h4>
+                </div>
+                <div class="modal-body">
+                	<div id="test-model-search">
+                		<input type="text" value="test">
+                		<button class="btn btn-sm btn-default">Search</button>
+                	</div>
+                  	<div id="test-model-selector" class="well">
+	               </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="loadModalClose()" type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button onclick="openTestSuite()"  type="button" class="btn btn-primary">Open</button>
+               </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
 </div>

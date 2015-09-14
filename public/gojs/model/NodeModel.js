@@ -34,9 +34,10 @@ function nodeStyle() {
 		// converted by the Point.parse static method.
 		// If the Node.location is changed, it updates the "loc" property of the node data,
 		// converting back using the Point.stringify static method.
-		new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify), {
+		{
 			// the Node.location is at the center of each node
 			locationSpot: go.Spot.Center,
+			locationObjectName:"SHAPE",
 			//isShadowed: true,
 			//shadowColor: "#888",
 			// handle mouse enter/leave events to show/hide the ports
@@ -45,16 +46,24 @@ function nodeStyle() {
 			},
 			mouseLeave: function(e, obj) {
 				showPorts(obj.part, false);
+			},
+			click: function(e, node) {
+				console.log(node.data);
+				console.log(node.position);
 			}
-		}
+		}, new go.Binding("location", "loc", go.Point.parse ).makeTwoWay(go.Point.stringify)
 	];
 }
 
 TOD.gojs.NodeModels.getNodeModel = function ( modelName ){
-	var target = TOD.gojs.NodeModels[modelName]();
+	try {
+		var target = TOD.gojs.NodeModels[modelName]();
 	
-	if(target.name){
-		return target.init();
+		if(target.name){
+			return target.init();
+		}
+	} catch (e){
+		console.log("invalid modelName");
 	}
 	return null;
 }
@@ -62,9 +71,10 @@ TOD.gojs.NodeModels.getNodeModel = function ( modelName ){
 TOD.gojs.NodeModels.ActionNode = function() {
 	function nodeSpecific(){
 		var _nodeStyle = nodeStyle();
-		events = _nodeStyle[1];
+		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
 			console.log("events binding for actionNode");
+			console.log(node);
 		}
 		return _nodeStyle;
 	}
@@ -82,7 +92,8 @@ TOD.gojs.NodeModels.ActionNode = function() {
 					{
 						margin: 6,
 						stroke: "white",
-						font: "bold 16px sans-serif"
+						font: "bold 11px sans-serif",
+						maxSize: new go.Size(160, NaN)
 					},
 					// TextBlock.text is data bound to the "name" attribute of the model data
 					new go.Binding("text").makeTwoWay())
@@ -114,7 +125,7 @@ TOD.gojs.NodeModels.StartNode = function(){
 					{
 						margin: 6,
 						stroke: "white",
-						font: "bold 16px sans-serif"
+						font: "bold 14px sans-serif"
 					},
 					new go.Binding("text")
 				)
@@ -143,7 +154,7 @@ TOD.gojs.NodeModels.EndNode = function (){
 				GO(go.TextBlock, "Start", {
 						margin: 6,
 						stroke: "white",
-						font: "bold 16px sans-serif"
+						font: "bold 14px sans-serif"
 					},
 					new go.Binding("text"))
 			),
@@ -162,7 +173,7 @@ TOD.gojs.NodeModels.EndNode = function (){
 TOD.gojs.NodeModels.AssertNode = function (){
 	function nodeSpecific(){
 		var _nodeStyle = nodeStyle();
-		events = _nodeStyle[1];
+		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
 			console.log("events binding for assertNode");
 			console.log(node.data);
@@ -181,7 +192,7 @@ TOD.gojs.NodeModels.AssertNode = function (){
 				GO(go.TextBlock, "Assert", {
 						margin: 6,
 						stroke: "white",
-						font: "bold 16px sans-serif"
+						font: "bold 14px sans-serif"
 					},
 					new go.Binding("text").makeTwoWay())
 			),
@@ -201,7 +212,7 @@ TOD.gojs.NodeModels.AssertNode = function (){
 TOD.gojs.NodeModels.PredefinedNode = function (){
 	function nodeSpecific(){
 		var _nodeStyle = nodeSpecific();
-		events = _nodeStyle[1];
+		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
 			console.log("events binding for assertNode");
 		}
@@ -223,9 +234,10 @@ TOD.gojs.NodeModels.PredefinedNode = function (){
 					},
 					new go.Binding("text").makeTwoWay())
 			),
-			makePort("L", go.Spot.Left, false, true),
-			makePort("R", go.Spot.Right, false, true),
-			makePort("T", go.Spot.Top, false, true)
+			makePort("T", go.Spot.Top, false, true),
+			makePort("L", go.Spot.Left, true, true),
+			makePort("R", go.Spot.Right, true, true),
+			makePort("B", go.Spot.Bottom, true, false)
 		)
 	}
 
@@ -238,7 +250,7 @@ TOD.gojs.NodeModels.PredefinedNode = function (){
 TOD.gojs.NodeModels.PreconditionNode = function (){
 	function nodeSpecific(){
 		var _nodeStyle = nodeSpecific();
-		events = _nodeStyle[1];
+		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
 			console.log("events binding for assertNode");
 		}
@@ -256,13 +268,14 @@ TOD.gojs.NodeModels.PreconditionNode = function (){
 				GO(go.TextBlock, "Defined step", {
 						margin: 6,
 						stroke: "white",
-						font: "bold 12px sans-serif"
+						font: "bold 12px sans-serif",
 					},
 					new go.Binding("text").makeTwoWay())
 			),
-			makePort("L", go.Spot.Left, false, true),
-			makePort("R", go.Spot.Right, false, true),
-			makePort("T", go.Spot.Top, false, true)
+			makePort("T", go.Spot.Top, false, true),
+			makePort("L", go.Spot.Left, true, true),
+			makePort("R", go.Spot.Right, true, true),
+			makePort("B", go.Spot.Bottom, true, false)
 		)
 	}
 

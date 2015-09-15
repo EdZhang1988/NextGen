@@ -11,6 +11,8 @@ TOD.gojs.myDiagram = GO(go.Diagram, "myDiagramDiv", {
 	initialContentAlignment: go.Spot.Top, // center Diagram contents
 	allowDrop: true,
 	initialAutoScale: go.Diagram.Uniform,
+	"LinkDrawn": showLinkLabel, // this DiagramEvent listener is defined below
+	"LinkRelinked": showLinkLabel,
 	"undoManager.isEnabled": true // enable Ctrl-Z to undo and Ctrl-Y to redo
 });
 
@@ -38,7 +40,13 @@ TOD.gojs.myDiagram.nodeTemplateMap.add("Precondition",
 	TOD.gojs.NodeModels.getNodeModel("PreconditionNode")
 );
 
-
+// Make link labels visible if coming out of a "conditional" node.
+// This listener is called by the "LinkDrawn" and "LinkRelinked" DiagramEvents.
+function showLinkLabel(e) {
+	var label = e.subject.findObject("LABEL");
+	if (label !== null) 
+		label.visible = (e.subject.fromNode.data.figure === "Diamond" || e.subject.fromNode.data.category === "Assertion" );
+}
 
 function showDetail(e, node, t) {
 	if (node !== null) {
@@ -240,42 +248,59 @@ $('#btn_load_diagrams')[0].onclick = function() {
 					"icon": "glyphicon glyphicon-file",
 					"valid_children": []
 				}
-			},'plugins': [
-				"state", "types", "wholerow","dnd"	
+			},
+			'plugins': [
+				"state", "types", "wholerow", "dnd"
 			]
 		});
 
-		TOD.gojs.modelLoader.on("select_node.jstree", function(e, node){
+		TOD.gojs.modelLoader.on("select_node.jstree", function(e, node) {
 			TOD.gojs.selectedModelNode = node.node;
 		})
 	}
 
-	if(!TOD.gojs.selectedModelNode){
+	if (!TOD.gojs.selectedModelNode) {
 		initTestModelLoader();
 	}
-	
-	$('#load-dialog').dialog('open');	
+
+	$('#load-dialog').dialog('open');
 }
 
 function loadModalClose() {
 	$('#load-dialog').dialog('close');
 }
 
-function openTestSuite(){
-	function loadModelFromSelection(){
+function openTestSuite() {
+	function loadModelFromSelection() {
 		var key = TOD.gojs.selectedModelNode.original.key;
 		// console.log(TOD.gojs.testModelService.load(key));
-		try{
-			TOD.gojs.myDiagram.model = go.Model.fromJson(TOD.gojs.testModelService.load(key));	
-		} catch (e){
+		try {
+			TOD.gojs.myDiagram.model = go.Model.fromJson(TOD.gojs.testModelService.load(key));
+		} catch (e) {
 			return false
 		}
-		
+
 		return true;
 	}
 
-	if(!loadModelFromSelection()){
-		return ;
+	if (!loadModelFromSelection()) {
+		return;
 	}
-	loadModalClose();	
+	loadModalClose();
+}
+
+$('#btn_new_diagram')[0].onclick = function() {
+	if (TOD.gojs.myDiagram.isModified) {
+		$.confirm({
+			text: "You've modifed the diagram, proceed will discard all your changes",
+			confirm: function() {
+				TOD.gojs.myDiagram.clear();
+			},
+			cancel: function() {
+				// nothing to do
+			}
+		});
+	} else {
+		TOD.gojs.myDiagram.clear();
+	}
 }

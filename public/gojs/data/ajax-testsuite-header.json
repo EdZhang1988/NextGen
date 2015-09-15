@@ -1,0 +1,18 @@
+[
+	"Dead Link", {
+		"id": "testsuit_1",
+		"text": "Login",
+		"type": "default",
+		"children": [{
+			"id": "testMode_1",
+			"text": "Simple Test Case",
+			"key": "simple",
+			"type": "file"
+		}, {
+			"id": "testMode_2",
+			"text": "Complex Test Case",
+			"key": "complex",
+			"type": "file"
+		}]
+	}
+]

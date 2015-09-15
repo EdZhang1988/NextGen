@@ -38,6 +38,7 @@ function nodeStyle() {
 			// the Node.location is at the center of each node
 			locationSpot: go.Spot.Center,
 			locationObjectName:"SHAPE",
+			resizable: true,
 			//isShadowed: true,
 			//shadowColor: "#888",
 			// handle mouse enter/leave events to show/hide the ports
@@ -73,8 +74,15 @@ TOD.gojs.NodeModels.ActionNode = function() {
 		var _nodeStyle = nodeStyle();
 		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
-			console.log("events binding for actionNode");
-			console.log(node);
+			// console.log("events binding for actionNode");
+			TOD.gojs.selectedNode = node;
+			console.log("dblClicked");
+			console.log(node.data)
+			TOD.gojs.detailDialog.setState({
+				mode:"display",
+				data: node.data
+			});
+			$("#detail-dialog").dialog("open");
 		}
 		return _nodeStyle;
 	}
@@ -176,7 +184,13 @@ TOD.gojs.NodeModels.AssertNode = function (){
 		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
 			console.log("events binding for assertNode");
-			console.log(node.data);
+			TOD.gojs.selectedNode = node;
+			
+			TOD.gojs.detailDialog.setState({
+				mode:"display",
+				data: node.data
+			});
+			$("#detail-dialog").dialog("open");
 		}
 		return _nodeStyle;
 	}

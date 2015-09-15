@@ -1,0 +1,10 @@
+[{
+	"id": "project_1",
+	"text": "Demo Project",
+	"children": true,
+	"type": "root"
+}, {
+	"id": "project_2",
+	"text": "Amarosa",
+	"type": "root"
+}]

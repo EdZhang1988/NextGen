@@ -184,8 +184,9 @@ var MockTestModelService = function() {
 				"key": -7,
 				"loc": "-25.953125 12",
 			}, {
-				"text": "???",
+				"text": "isPageOpen",
 				"figure": "Diamond",
+				"category":"LogicControl",
 				"key": -3,
 				"loc": "-24.953125 71",
 			}, {
@@ -319,6 +320,8 @@ var MockTestModelService = function() {
 				"to": "0",
 				"fromPort": "L",
 				"toPort": "T",
+				"text": "true",
+				"visible":true,
 				"points": {
 					"__gohashid": 57225,
 					"Qa": true,
@@ -357,6 +360,8 @@ var MockTestModelService = function() {
 				"to": "4",
 				"fromPort": "R",
 				"toPort": "R",
+				"text": "false",
+				"visible":true,
 				"points": {
 					"__gohashid": 75461,
 					"Qa": true,

@@ -20,6 +20,10 @@ TOD.gojs.myDiagram.nodeTemplateMap.add("",
 	TOD.gojs.NodeModels.getNodeModel("ActionNode")
 );
 
+TOD.gojs.myDiagram.nodeTemplateMap.add("LogicControl",
+	TOD.gojs.NodeModels.getNodeModel("LogicControlNode")
+);
+
 TOD.gojs.myDiagram.nodeTemplateMap.add("Start",
 	TOD.gojs.NodeModels.getNodeModel("StartNode")
 );
@@ -138,6 +142,7 @@ var myPalette = GO(go.Palette, "myPalette", {
 		text: "Step"
 	}, {
 		text: "???",
+		category: "LogicControl",
 		figure: "Diamond"
 	}, {
 		text: "Assert",
@@ -173,8 +178,11 @@ TOD.gojs.myDiagram.model = go.Model.fromJson(dataSet);
 
 $("#detail-dialog").dialog({
 	autoOpen: false,
-	modal: true
+	modal: false
 });
+ $("#detail-dialog").draggable({
+      handle: ".modal-header"
+  });
 
 $("#load-dialog").dialog({
 	autoOpen: false,

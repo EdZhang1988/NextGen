@@ -76,11 +76,11 @@ TOD.gojs.NodeModels.ActionNode = function() {
 		events.doubleClick = function (e, node){
 			// console.log("events binding for actionNode");
 			TOD.gojs.selectedNode = node;
-			console.log("dblClicked");
-			console.log(node.data)
+			// console.log("dblClicked");
+			// console.log(node.data)
 			TOD.gojs.detailDialog.setState({
 				mode:"display",
-				data: node.data
+				data: node
 			});
 			$("#detail-dialog").dialog("open");
 		}
@@ -118,6 +118,53 @@ TOD.gojs.NodeModels.ActionNode = function() {
 		'init': init
 	};
 };
+
+TOD.gojs.NodeModels.LogicControlNode = function (){
+	function nodeSpecific(){
+		var _nodeStyle = nodeStyle();
+		events = _nodeStyle[0];
+		events.doubleClick = function (e, node){
+			TOD.gojs.selectedNode = node;
+			TOD.gojs.detailDialog.setState({
+				mode:"display",
+				data: node
+			});
+			$("#detail-dialog").dialog("open");
+		}
+		return _nodeStyle;
+	}
+
+	function init(){
+		return GO(go.Node, "Spot", nodeSpecific(),
+			GO(go.Panel, "Auto",
+				GO(go.Shape, "Diamond", {
+					minSize: new go.Size(32, 32),
+					fill: "#00A9C9",
+					stroke: null
+				}, new go.Binding("figure", "figure")),
+				GO(go.TextBlock,
+					// some room around the text, a larger font, and a white stroke:
+					{
+						margin: 6,
+						stroke: "white",
+						font: "bold 11px sans-serif",
+						maxSize: new go.Size(160, NaN)
+					},
+					// TextBlock.text is data bound to the "name" attribute of the model data
+					new go.Binding("text", "text").makeTwoWay())
+			),
+			makePort("T", go.Spot.Top, false, true),
+			makePort("L", go.Spot.Left, true, true),
+			makePort("R", go.Spot.Right, true, true),
+			makePort("B", go.Spot.Bottom, true, false)
+		)
+	}
+
+	return {
+		name: "logicControlNode",
+		'init': init
+	};
+}
 
 TOD.gojs.NodeModels.StartNode = function(){
 	function init(){
@@ -183,12 +230,12 @@ TOD.gojs.NodeModels.AssertNode = function (){
 		var _nodeStyle = nodeStyle();
 		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
-			console.log("events binding for assertNode");
+			console.log("doubleClick for assertNode");
 			TOD.gojs.selectedNode = node;
 			
 			TOD.gojs.detailDialog.setState({
 				mode:"display",
-				data: node.data
+				data: node
 			});
 			$("#detail-dialog").dialog("open");
 		}

@@ -3,22 +3,45 @@ var TestNodeDetailDialog = React.createClass({
 		console.log("init dialog")
 		return {
 			mode: "display",
-			data: {}
+			data: {
+				data: {}
+			}
 		};
 	},
-
 	// componentDidMount: function (){
 	// 	console.log("componentDidMount");
 	// },
 	shouldComponentUpdate: function (nextProps, nextState) {
-		console.log("shouldComponentUpdate");
+		
 		return true;
 	},
 	detailModalClose: function(){
+
 		$("#detail-dialog").dialog("close");
+	},
+	updateNodeInfo: function(){
+		//TODO for now, this will only update the node on the diagram
+		if(!this.state.newVal){
+			return;
+		}
+
+		for(var att in this.state.data.data){
+			TOD.gojs.myDiagram.model.setDataProperty(this.state.data.data, att, this.state.newVal[att]);	
+		}
+		// TOD.gojs.myDiagram.model.setDataProperty(this.state.data.data, "name", this.state.data.data.name+" ");
+		
+		this.detailModalClose();
+		
+		// TOD.gojs.myDiagram.undoManager.startTransaction();
+		
+		// TOD.gojs.myDiagram.undoManager.commitTransaction();
 	},
 	changeMode: function(){
 		this.setState({mode:"edit"});
+	},
+	handleContentChange: function(data){
+		console.log("handleContentChange");
+		this.state.newVal = data;
 	},
 	render: function (){
 		var _self = this;
@@ -28,22 +51,28 @@ var TestNodeDetailDialog = React.createClass({
 			<div className="modal-content">
 				<div className="modal-header">
 					<button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-					<h4 className="modal-title">{this.state.data.category}</h4>
+					<h4 className="modal-title">{this.state.data.data.category}</h4>
 				</div>
 				<div className="modal-body">
 					{ ( function(){
-						switch (_self.state.data.category){
+						switch (_self.state.data.data.category){
 							default : {
 								switch (_self.state.mode) {
 									case "display": return <StepDetailInfo data={_self.state.data} />;
-									case "edit": return <StepDetailInfoEdit data={_self.state.data} />;
+									case "edit": return <StepDetailInfoEdit data={_self.state.data} onContentChange={_self.handleContentChange}/>;
 								}		
 							};
 							case "Assertion": {
 								switch (_self.state.mode) {
 									case "display": return <AssertionDetail data={_self.state.data} />;
-									case "edit": return <StepDetailInfoEdit data={_self.state.data} />;
-								}	
+									case "edit": return <StepDetailInfoEdit data={_self.state.data}  onContentChange={_self.handleContentChange}/>;
+								}
+							};
+							case "LogicControl": {
+								switch (_self.state.mode) {
+									case "display": return <LogicControlInfo data={_self.state.data} />;
+									case "edit": return <StepDetailInfoEdit data={_self.state.data}  onContentChange={_self.handleContentChange}/>;
+								}
 							}
 						}
 
@@ -55,7 +84,7 @@ var TestNodeDetailDialog = React.createClass({
 					{ ( function(){
 						switch (_self.state.mode) {
 							case "display": return <button onClick={_self.changeMode} className="btn btn-sm btn-primary">Edit</button>;
-							case "edit": return <button onClick={_self.detailModalClose}  type="button" className="btn btn-primary">Save changes</button>;
+							case "edit": return <button onClick={_self.updateNodeInfo}  type="button" className="btn btn-primary">Save changes</button>;
 						}
 					})()}		
 				</div>

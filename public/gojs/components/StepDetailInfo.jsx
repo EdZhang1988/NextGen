@@ -15,7 +15,7 @@ var StepDetailInfo = React.createClass({
       <div className="detail-info">
         <div >
         	<label>Name:</label>
-        	<span >{this.props.data.text}</span>
+        	<span >{this.props.data.data.text}</span>
         </div>
       </div>
     );

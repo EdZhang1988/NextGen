@@ -25,7 +25,7 @@ var TestNodeDetailDialog = React.createClass({
 			return;
 		}
 
-		for(var att in this.state.data.data){
+		for(var att in this.state.newVal){
 			TOD.gojs.myDiagram.model.setDataProperty(this.state.data.data, att, this.state.newVal[att]);	
 		}
 		// TOD.gojs.myDiagram.model.setDataProperty(this.state.data.data, "name", this.state.data.data.name+" ");
@@ -65,7 +65,7 @@ var TestNodeDetailDialog = React.createClass({
 							case "Assertion": {
 								switch (_self.state.mode) {
 									case "display": return <AssertionDetail data={_self.state.data} />;
-									case "edit": return <StepDetailInfoEdit data={_self.state.data}  onContentChange={_self.handleContentChange}/>;
+									case "edit": return <AssertionDetailEdit data={_self.state.data}  onContentChange={_self.handleContentChange}/>;
 								}
 							};
 							case "LogicControl": {

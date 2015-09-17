@@ -171,16 +171,16 @@ TOD.gojs.NodeModels.StartNode = function(){
 		return GO(go.Node, "Spot", nodeStyle(),
 			GO(go.Panel, "Auto",
 				GO(go.Shape, "Circle", {
-					minSize: new go.Size(32, 32),
+					minSize: new go.Size(24, 24),
 					fill: "#8800C9",
 					stroke: null
 				}),
 				GO(go.TextBlock,
 					"Start", // the initial value for TextBlock.text
 					{
-						margin: 6,
+						margin: 4,
 						stroke: "white",
-						font: "bold 14px sans-serif"
+						font: "bold 12px sans-serif"
 					},
 					new go.Binding("text")
 				)
@@ -202,14 +202,14 @@ TOD.gojs.NodeModels.EndNode = function (){
 		return 	GO(go.Node, "Spot", nodeStyle(),
 			GO(go.Panel, "Auto",
 				GO(go.Shape, "Circle", {
-					minSize: new go.Size(32, 32),
+					minSize: new go.Size(24, 24),
 					fill: "lightgreen",
 					stroke: null
 				}),
 				GO(go.TextBlock, "Start", {
-						margin: 6,
+						margin: 4,
 						stroke: "white",
-						font: "bold 14px sans-serif"
+						font: "bold 12px sans-serif"
 					},
 					new go.Binding("text"))
 			),
@@ -221,6 +221,51 @@ TOD.gojs.NodeModels.EndNode = function (){
 
 	return {
 		name: "endNode",
+		'init': init
+	};
+}
+
+TOD.gojs.NodeModels.DataProcessNode = function(){
+	function nodeSpecific(){
+		var _nodeStyle = nodeStyle();
+		events = _nodeStyle[0];
+		events.doubleClick = function (e, node){
+			console.log("doubleClick for dataProcessNode");
+			TOD.gojs.selectedNode = node;
+			
+			TOD.gojs.detailDialog.setState({
+				mode:"display",
+				data: node
+			});
+			$("#detail-dialog").dialog("open");
+		}
+		return _nodeStyle;
+	}
+
+	function init(){
+		return GO(go.Node, "Spot", nodeSpecific(),
+			GO(go.Panel, "Auto",
+				GO(go.Shape, "DataStorage", {
+					minSize: new go.Size(32, 32),
+					fill: "#234B5E",
+					stroke: null
+				}),
+				GO(go.TextBlock, "Data Process", {
+						margin: 4,
+						stroke: "white",
+						font: "bold 10px sans-serif"
+					},
+					new go.Binding("text").makeTwoWay())
+			),
+			makePort("T", go.Spot.Top, false, true),
+			makePort("L", go.Spot.Left, true, true),
+			makePort("R", go.Spot.Right, true, true),
+			makePort("B", go.Spot.Bottom, true, false)
+		)
+	}
+
+	return {
+		name: "dataProcess",
 		'init': init
 	};
 }

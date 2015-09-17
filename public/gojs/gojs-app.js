@@ -32,6 +32,10 @@ TOD.gojs.myDiagram.nodeTemplateMap.add("Assertion",
 	TOD.gojs.NodeModels.getNodeModel("AssertNode")
 );
 
+TOD.gojs.myDiagram.nodeTemplateMap.add("DataProcess",
+	TOD.gojs.NodeModels.getNodeModel("DataProcessNode")
+);
+
 TOD.gojs.myDiagram.nodeTemplateMap.add("End",
 	TOD.gojs.NodeModels.getNodeModel("EndNode")
 );
@@ -144,6 +148,9 @@ var myPalette = GO(go.Palette, "myPalette", {
 		text: "???",
 		category: "LogicControl",
 		figure: "Diamond"
+	},{
+		text:"DataProcess",
+		category:"DataProcess"
 	}, {
 		text: "Assert",
 		category: "Assertion"

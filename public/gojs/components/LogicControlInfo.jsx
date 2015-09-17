@@ -44,10 +44,10 @@ var LogicControlInfo = React.createClass({
 	    	console.log(link);
 	    	var toNode = TOD.gojs.myDiagram.findNodeForKey(link.to);
 		      return (
-		        <a href="#" className="list-group-item">
-					<h4 className="list-group-item-heading">Port: <span className="badge label-primary">{link.fromPort}</span></h4>
-					<p className="list-group-item-text">Assert result: <span className="label label-success">{link.text}</span> To Node: <span className="label label-success">{toNode.data.text}</span></p>
-				</a>
+		        <div className="list-group-item">
+					<h4 className="list-group-item-heading">In case: <span className="badge label-success">{link.text}</span></h4>
+					<p className="list-group-item-text">Port: <span className="label label-primary">{link.fromPort}</span> To Node: <span className="label label-success">{toNode.data.text}</span></p>
+				</div>
 		     );
 	    });
         return (

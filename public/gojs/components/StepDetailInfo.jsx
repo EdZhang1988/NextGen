@@ -2,10 +2,6 @@
 * This is a component to display all information of each step
 */
 var StepDetailInfo = React.createClass({
-  // getInitialState: function (){
-  // 	return {data: []};
-  // },
-
   shouldComponentUpdate: function (nextProps, nextState) {  	
   	return true;
   },
@@ -17,6 +13,12 @@ var StepDetailInfo = React.createClass({
             <label for="stepNameInput" className="col-sm-2 control-label">Step Name</label>
             <div className="col-sm-10">
               <span className="form-control" id="stepName" placeholder="name of Step" >{this.props.data.data.text}</span>
+            </div>
+          </div>
+          <div className="form-group">
+            <label for="actionType" className="col-sm-2 control-label">Action</label>
+            <div className="col-sm-10">
+              <span className="form-control" id="actionType" placeholder="type of action" >{this.props.data.data.actionType}</span>
             </div>
           </div>
           <div className="form-group">

@@ -355,23 +355,30 @@ TOD.gojs.NodeModels.PredefinedNode = function (){
 
 TOD.gojs.NodeModels.PreconditionNode = function (){
 	function nodeSpecific(){
-		var _nodeStyle = nodeSpecific();
+		var _nodeStyle = nodeStyle();
 		events = _nodeStyle[0];
 		events.doubleClick = function (e, node){
-			console.log("events binding for assertNode");
+			console.log("events binding for precondition");
+			TOD.gojs.selectedNode = node;
+			
+			TOD.gojs.detailDialog.setState({
+				mode:"display",
+				data: node
+			});
+			$("#detail-dialog").dialog("open");
 		}
 		return _nodeStyle;
 	}
 
 	function init(){
-		return GO(go.Node, "Spot", nodeStyle(),
+		return GO(go.Node, "Spot", nodeSpecific(),
 			GO(go.Panel, "Auto",
 				GO(go.Shape, "RoundedRectangle", {
 					minSize: new go.Size(40, 40),
 					fill: "#E95055",
 					stroke: null
 				}),
-				GO(go.TextBlock, "Defined step", {
+				GO(go.TextBlock, "precondition", {
 						margin: 6,
 						stroke: "white",
 						font: "bold 12px sans-serif",

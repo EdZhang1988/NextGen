@@ -1,0 +1,85 @@
+{
+    "class": "go.GraphLinksModel",
+    "linkFromPortIdProperty": "fromPort",
+    "linkToPortIdProperty": "toPort",
+    "nodeDataArray": [
+        {
+            "key": "-1",
+            "loc": "0 70",
+            "name": "Start",
+            "category": "Start"
+        },
+        {
+            "key": "0",
+            "loc": "0 120",
+            "name": "Alpha",
+            "text": "inputusername",
+            "source": "cat1.png",
+            "actionType": "sendKey",
+            "parameter": {
+                "id": "input-box",
+                "value": "13800138000"
+            }
+        },
+        {
+            "key": "1",
+            "loc": "30 170",
+            "name": "Beta",
+            "text": "inputpassword",
+            "source": "cat1.png"
+        },
+        {
+            "key": "2",
+            "loc": "0 220",
+            "name": "Gamma",
+            "text": "select 'remember me'",
+            "source": "cat1.png"
+        },
+        {
+            "key": "3",
+            "loc": "0 270",
+            "name": "Delta",
+            "text": "click'login'button",
+            "source": ""
+        },
+        {
+            "key": "4",
+            "loc": "0 320",
+            "name": "end",
+            "text": "End",
+            "category": "End"
+        }
+    ],
+    "linkDataArray": [
+        {
+            "from": "-1",
+            "to": "0",
+            "fromPort": "B",
+            "toPort": "T"
+        },
+        {
+            "from": "0",
+            "to": "1",
+            "fromPort": "B",
+            "toPort": "T"
+        },
+        {
+            "from": "1",
+            "to": "2",
+            "fromPort": "B",
+            "toPort": "T"
+        },
+        {
+            "from": "2",
+            "to": "3",
+            "fromPort": "B",
+            "toPort": "T"
+        },
+        {
+            "from": "3",
+            "to": "4",
+            "fromPort": "B",
+            "toPort": "T"
+        }
+    ]
+}

@@ -73,7 +73,8 @@ var TestNodeDetailDialog = React.createClass({
 									case "display": return <LogicControlInfo data={_self.state.data} />;
 									case "edit": return <StepDetailInfoEdit data={_self.state.data}  onContentChange={_self.handleContentChange}/>;
 								}
-							}
+							};
+							
 						}
 
 						

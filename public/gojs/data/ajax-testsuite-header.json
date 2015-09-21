@@ -13,6 +13,11 @@
 			"text": "Complex Test Case",
 			"key": "complex",
 			"type": "file"
+		}, {
+			"id": "testMode_3",
+			"text": "Valid Test Case",
+			"key": "valid",
+			"type": "file"
 		}]
 	}
 ]
